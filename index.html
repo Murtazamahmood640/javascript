@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON to PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Your CSS for the content */
+        .report-item { margin-bottom: 10px; }
+        .report-item strong { color: navy; }
+    </style
+</head>
+<body>
+    <div id="content">
+        <!-- JSON data will populate this area -->
+    </div>
+    <button onclick="generatePDF()">Generate PDF</button>
+
+    <script>
+        // Sample JSON data (replace with your actual fetch)
+        const jsonData = {
+            title: "My Report",
+            items: [
+                { id: 1, name: "Item A", value: 100 },
+                { id: 2, name: "Item B", value: 200 }
+            ]
+        };
+
+        function displayData(data) {
+            const contentDiv = document.getElementById('content');
+            contentDiv.innerHTML = `<h1>${data.title}</h1>`;
+            data.items.forEach(item => {
+                contentDiv.innerHTML += `
+                    <div class="report-item">
+                        <strong>ID:</strong> ${item.id}<br>
+                        <strong>Name:</strong> ${item.name}<br>
+                        <strong>Value:</strong> ${item.value}
+                    </div>`;
+            });
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const element = document.getElementById('content');
+            
+            // Add content from the DOM (or build manually)
+            doc.html(element, {
+                callback: function (doc) {
+                    doc.save("report.pdf");
+                },
+                x: 10,
+                y: 10,
+                width: 180, // Adjust width as needed
+                windowWidth: 500 // Adjust window width for better rendering
+            });
+        }
+
+        displayData(jsonData); // Display data when page loads
+    </script>
+</body>
+</html>
